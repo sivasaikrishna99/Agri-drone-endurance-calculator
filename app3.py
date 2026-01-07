@@ -4,7 +4,7 @@ from scipy.interpolate import PchipInterpolator
 
 st.set_page_config(page_title="Drone Endurance Calculator", layout="centered")
 
-st.title("🚁 Drone Endurance & Mission Calculator")
+st.title("🚁 Agriculture Drone Endurance Calculator")
 
 # =========================================================
 # Motor Thrust vs Current Table Input
@@ -168,3 +168,4 @@ if st.button("🧮 Calculate Endurance"):
     st.write(f"⏱️ **Takeoff – Hover until RTL – Land:** {MTOW_HOVER_UNTIL_RTL:.2f} minutes")
     st.write(f"⏱️ **Takeoff – Dispense once – Hover – Land:** {MTOW_DISPENSE_HOVER_UNTIL_RTL:.2f} minutes")
     st.write(f"⏱️ **Takeoff – Dispense – Land (Repeat until RTL):** {MTOW_DISPENSE_REFILL_UNTIL_RTL:.2f} minutes")
+
