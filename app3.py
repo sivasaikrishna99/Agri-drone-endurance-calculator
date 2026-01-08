@@ -10,11 +10,9 @@ st.title("🚁 Agriculture Drone Endurance Calculator")
 # Motor Thrust vs Current Table Input
 # =========================================================
 st.header("Motor Thrust vs Current Data (Per Motor)")
-
-st.info(
-    "Motor thrust vs current specification data should be taken directly from the "
+ help="Motor thrust vs current specification data should be taken directly from the "
     "motor manufacturer’s official website or test report. "
-    "Ensure the data corresponds to the exact motor–propeller–voltage combination used."
+   
 )
 default_motor_data = {
     "Thrust (g)": [
@@ -202,11 +200,13 @@ if st.button("🧮 Calculate Endurance"):
 
     st.markdown("---")
 st.info(
+     "NOTE"
     "• This page is intended strictly for educational purposes and is currently in the development stage. "
     "All output data represents theoretical assumptions only.\n\n"
     "• Please ensure the required thrust per motor remains within the manufacturer’s recommended operating range, "
     "as specified on the motor’s official website.\n\n"
-    "• Battery voltage limits, discharge curves, and cut-off protections are not considered in the backend calculations. "
+    "• Battery voltage limits are not considered in the backend calculations. "
     "As a result, the actual number of achievable mission cycles may differ in real-world operation."
 )
+
 
