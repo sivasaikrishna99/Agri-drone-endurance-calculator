@@ -190,8 +190,9 @@ if st.button("🧮 Calculate Endurance"):
     st.success("Calculation Complete")
 
     st.write(f"✅ **Estimated Number of Mission Cycles:** {max_cycles:.1f}")
-    st.write(f"⏱️ **Empty tank: Takeoff – Hover until RTL – Land:** {MTOW_HOVER_UNTIL_RTL:.2f} minutes")
+    st.write(f"⏱️ **MTOW: Takeoff – Hover until RTL – Land:** {MTOW_HOVER_UNTIL_RTL:.2f} minutes")
     st.write(f"⏱️ **Takeoff – Dispense once – Hover until RTL – Land:** {MTOW_DISPENSE_HOVER_UNTIL_RTL:.2f} minutes")
     st.write(f"⏱️ **Takeoff – Dispense – Land (Repeat until RTL):** {MTOW_DISPENSE_REFILL_UNTIL_RTL:.2f} minutes")
-    st.write(f"⏱️ **MTOW: Takeoff – Hover until RTL – Land:** {EMPTY_TANK_HOVER_UNTIL_RTL:.2f} minutes")
+    st.write(f"⏱️ **Empty tank: Takeoff – Hover until RTL – Land:** {EMPTY_TANK_HOVER_UNTIL_RTL:.2f} minutes")
+
 
