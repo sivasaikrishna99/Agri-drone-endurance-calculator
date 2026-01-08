@@ -9,10 +9,10 @@ st.title("🚁 Agriculture Drone Endurance Calculator")
 # =========================================================
 # Motor Thrust vs Current Table Input
 # =========================================================
-st.header("Motor Thrust vs Current Data (Per Motor)")
- help="Motor thrust vs current specification data should be taken directly from the "
+st.header("Motor Thrust vs Current Data (Per Motor)",
+ help=("Motor thrust vs current specification data should be taken directly from the "
     "motor manufacturer’s official website or test report. "
-   
+      )   
 )
 default_motor_data = {
     "Thrust (g)": [
@@ -208,5 +208,6 @@ st.info(
     "• Battery voltage limits are not considered in the backend calculations. "
     "As a result, the actual number of achievable mission cycles may differ in real-world operation."
 )
+
 
 
