@@ -162,6 +162,27 @@ if st.button("🧮 Calculate Endurance"):
     )
 
     MTOW_DISPENSE_REFILL_UNTIL_RTL = max_cycles * time_per_cycle_min
+    # =====================================================
+    # Empty tank: Takeoff – Hover until RTL – Land (CORRECTED)
+    # =====================================================
+    
+    thrust_takeoff_dry = (dry_kg * 1000 * tw_ratio_takeoff) / motors;
+    I_takeoff_dry = current_interp(thrust_takeoff_dry);
+    I_total_takeoff_dry = (I_takeoff_dry * motors) + electronics_consumption;
+    Ah_takeoff_dry = I_total_takeoff_dry * takeoff_time / 60;
+    
+    thrust_landing_dry = (dry_kg * 1000 * tw_ratio_landing) / motors;
+    I_landing_dry = current_interp(thrust_landing_dry);
+    I_total_landing_dry = (I_landing_dry * motors) + electronics_consumption;
+    Ah_landing_dry = I_total_landing_dry * landing_time / 60;
+
+    Ah_hover_dry = battery_Ah - Ah_takeoff_dry - Ah_landing_dry;
+    thrust_hovering_dry = (dry_kg * 1000 * tw_ratio_hover_dispense) / motors;
+    I_hovering_dry = current_interp(thrust_hovering);
+    I_total_hovering_dry = (I_hovering_dry * motors) + electronics_consumption;
+    hovering_time_dry = Ah_hover_dry * 60 / I_total_hovering_dry;
+    EMPTY_TANK_HOVER_UNTIL_RTL = takeoff_time + landing_time + hovering_time_dry;
+
 
     # =====================
     # Display Results
@@ -169,7 +190,8 @@ if st.button("🧮 Calculate Endurance"):
     st.success("Calculation Complete")
 
     st.write(f"✅ **Estimated Number of Mission Cycles:** {max_cycles:.1f}")
-    st.write(f"⏱️ **Takeoff – Hover until RTL – Land:** {MTOW_HOVER_UNTIL_RTL:.2f} minutes")
+    st.write(f"⏱️ **Empty tank: Takeoff – Hover until RTL – Land:** {MTOW_HOVER_UNTIL_RTL:.2f} minutes")
     st.write(f"⏱️ **Takeoff – Dispense once – Hover until RTL – Land:** {MTOW_DISPENSE_HOVER_UNTIL_RTL:.2f} minutes")
     st.write(f"⏱️ **Takeoff – Dispense – Land (Repeat until RTL):** {MTOW_DISPENSE_REFILL_UNTIL_RTL:.2f} minutes")
+    st.write(f"⏱️ **MTOW: Takeoff – Hover until RTL – Land:** {EMPTY_TANK_HOVER_UNTIL_RTL:.2f} minutes")
 
