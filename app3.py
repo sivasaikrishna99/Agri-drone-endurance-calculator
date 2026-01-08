@@ -11,6 +11,11 @@ st.title("🚁 Agriculture Drone Endurance Calculator")
 # =========================================================
 st.header("Motor Thrust vs Current Data (Per Motor)")
 
+st.info(
+    "Motor thrust vs current specification data should be taken directly from the "
+    "motor manufacturer’s official website or test report. "
+    "Ensure the data corresponds to the exact motor–propeller–voltage combination used."
+)
 default_motor_data = {
     "Thrust (g)": [
         1499, 2001, 2498, 2997, 3500, 4001, 4998, 5500, 6003, 6500,
@@ -195,4 +200,13 @@ if st.button("🧮 Calculate Endurance"):
     st.write(f"⏱️ **Takeoff – Dispense – Land (Repeat until RTL):** {MTOW_DISPENSE_REFILL_UNTIL_RTL:.2f} minutes")
     st.write(f"⏱️ **Empty tank: Takeoff – Hover until RTL – Land:** {EMPTY_TANK_HOVER_UNTIL_RTL:.2f} minutes")
 
+    st.markdown("---")
+st.info(
+    "• This page is intended strictly for educational purposes and is currently in the development stage. "
+    "All output data represents theoretical assumptions only.\n\n"
+    "• Please ensure the required thrust per motor remains within the manufacturer’s recommended operating range, "
+    "as specified on the motor’s official website.\n\n"
+    "• Battery voltage limits, discharge curves, and cut-off protections are not considered in the backend calculations. "
+    "As a result, the actual number of achievable mission cycles may differ in real-world operation."
+)
 
