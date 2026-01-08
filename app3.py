@@ -50,7 +50,7 @@ with col1:
     payload_weight = st.number_input(
         "Variable Payload Weight (kg)",
         value=10.0,
-        help="depleting payloads like Liquid, Seeds
+        help="depleting payloads like Liquid, Seeds"
     )
 
 with col2:
@@ -212,6 +212,7 @@ st.info(
     "• Battery voltage limits are not considered in the backend calculations. "
     "As a result, the actual number of achievable mission cycles may differ in real-world operation."
 )
+
 
 
 
