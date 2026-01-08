@@ -47,7 +47,11 @@ with col1:
     motors = st.number_input("Number of Motors", min_value=1, value=6)
     empty_weight = st.number_input("Empty Weight (kg)", value=13.15)
     battery_weight = st.number_input("Battery Weight (kg)", value=4.8)
-    payload_weight = st.number_input("Variable Payload Weight (kg)", value=10.0)
+    payload_weight = st.number_input(
+        "Variable Payload Weight (kg)",
+        value=10.0,
+        help="depleting payloads like Liquid, Seeds
+    )
 
 with col2:
     max_battery_Ah = st.number_input("Max Battery Capacity (Ah)", value=30.0)
@@ -208,6 +212,7 @@ st.info(
     "• Battery voltage limits are not considered in the backend calculations. "
     "As a result, the actual number of achievable mission cycles may differ in real-world operation."
 )
+
 
 
 
