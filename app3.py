@@ -3,7 +3,6 @@ import numpy as np
 from scipy.interpolate import PchipInterpolator
 
 st.set_page_config(page_title="Drone Endurance Calculator", layout="centered")
-
 st.title("🚁 Agriculture Drone Endurance Calculator")
 
 # =========================================================
@@ -84,7 +83,10 @@ with st.expander("⚙️ Advanced Settings"):
 # Calculate Button
 # =========================================================
 if st.button("🧮 Calculate Endurance"):
+
+    # ---------------------
     # Time conversions
+    # ---------------------
     takeoff_time = takeoff_time_sec / 60
     landing_time = landing_time_sec / 60
 
@@ -114,33 +116,41 @@ if st.button("🧮 Calculate Endurance"):
         Ah_dispense += (I_total * dt) / 3600
 
     # =====================
-    # Phase 3: Landing
+    # Phase 3: Landing (empty payload assumption)
     # =====================
     thrust_landing = (dry_kg * 1000 * tw_ratio_landing) / motors
     I_landing = current_interp(thrust_landing)
     I_total_landing = (I_landing * motors) + electronics_consumption
     Ah_landing = I_total_landing * landing_time / 60
 
-    # =====================
-    # Phase 4: Hover
-    # =====================
-    Ah_hover = battery_Ah - Ah_takeoff - Ah_dispense - Ah_landing
+    # =========================================================
+    # Payload-Based Mission Accounting (CORRECTED LOGIC)
+    # =========================================================
 
-    thrust_hovering = (dry_kg * 1000 * tw_ratio_hover_dispense) / motors
-    I_hovering = current_interp(thrust_hovering)
-    I_total_hovering = (I_hovering * motors) + electronics_consumption
-    hovering_time = Ah_hover * 60 / I_total_hovering
+    # Energy required for one full payload cycle
+    Ah_full_payload_cycle = Ah_takeoff + Ah_dispense + Ah_landing
 
-    # =====================
-    # Totals
-    # =====================
-    Ah_per_cycle = Ah_takeoff + Ah_dispense + Ah_landing
-    max_cycles = int(np.floor(battery_Ah / Ah_per_cycle))
-    time_per_cycle_min = takeoff_time + dispense_duration_min + landing_time
+    # Number of complete payloads safely dispensed
+    full_cycles = int(np.floor(battery_Ah / Ah_full_payload_cycle))
 
-    # =====================
-    # MTOW Profiles
-    # =====================
+    # Remaining battery after full cycles
+    Ah_remaining = battery_Ah - full_cycles * Ah_full_payload_cycle
+
+    # Minimum energy required to attempt another flight
+    Ah_min_flight = Ah_takeoff + Ah_landing
+
+    # Partial dispense fraction (if another flight is possible)
+    if Ah_remaining >= Ah_min_flight:
+        Ah_available_for_dispense = Ah_remaining - Ah_min_flight
+        partial_fraction = min(1.0, Ah_available_for_dispense / Ah_dispense)
+    else:
+        partial_fraction = 0.0
+
+    max_cycles = full_cycles + partial_fraction
+
+    # =========================================================
+    # MTOW Profiles (unchanged)
+    # =========================================================
     thrust_takeoff_MTOW = (total_kg_start * 1000 * tw_ratio_takeoff) / motors
     I_total_takeoff_MTOW = (current_interp(thrust_takeoff_MTOW) * motors) + electronics_consumption
     Ah_takeoff_MTOW = I_total_takeoff_MTOW * takeoff_time / 60
@@ -156,16 +166,12 @@ if st.button("🧮 Calculate Endurance"):
     hovering_time_MTOW = Ah_hover_MTOW * 60 / I_total_hover_MTOW
 
     MTOW_HOVER_UNTIL_RTL = takeoff_time + landing_time + hovering_time_MTOW
-    MTOW_DISPENSE_HOVER_UNTIL_RTL = takeoff_time + dispense_duration_min + landing_time + hovering_time
-    MTOW_DISPENSE_REFILL_UNTIL_RTL = max_cycles * time_per_cycle_min
 
-    # =====================
+    # =========================================================
     # Display Results
-    # =====================
+    # =========================================================
     st.success("Calculation Complete")
 
-    st.write(f"✅ **Estimated Number of Mission Cycles:** {max_cycles}")
-    st.write(f"⏱️ **Takeoff – Hover until RTL – Land:** {MTOW_HOVER_UNTIL_RTL:.2f} minutes")
-    st.write(f"⏱️ **Takeoff – Dispense once – Hover – Land:** {MTOW_DISPENSE_HOVER_UNTIL_RTL:.2f} minutes")
-    st.write(f"⏱️ **Takeoff – Dispense – Land (Repeat until RTL):** {MTOW_DISPENSE_REFILL_UNTIL_RTL:.2f} minutes")
+    st.write(f"🔁 **Maximum Payload Cycles (Equivalent):** {max_cycles:.2f}")
+    st.write(f"⏱️ **MTOW: Takeoff – Hover until RTL – Land:** {MTOW_HOVER_UNTIL_RTL:.2f} minutes")
 
